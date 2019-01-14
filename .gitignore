@@ -1,5 +1,6 @@
 tests/*
 mr/*
+bin/*
 specyfication.pdf
 parser.output
-bin/*
+compiler
