@@ -1,4 +1,6 @@
-/* Compiler for simple iterative language SIL */
+/* Compiler for simple iterative language SIL
+ *	TODO: Add class for getting variables in different forms (var, arr(var), arr(const))
+ */
 %{
 	#include <iostream>
 	#include <string>
@@ -8,39 +10,37 @@
 	#include "../src/utils/OperationGenerator.h"
 	#include "../src/utils/main.h"
 
+	int yylex();
+	int yyerror(const char *p);
+	extern int yylineno;
+
 	using namespace std;
 
-	int yylex();
-	int yyerror(const char *p)
-	{
-		cerr << "Error!" << endl;
-		exit(1);
-		return 1;
-	}
+	//bool DEBUG = false;
+	bool DEBUG = true;
 %}
 
 %union{
 	char* sval;
-	char* ival;
-	struct VarType* varType;
+	class Variable* var;
 }
 
-%type <varType> id
-%type <varType> value
-%type <varType> expression
+%type <var> id
+%type <var> value
+%type <var> expression
 
-%token <varType> DECLARE /* Declarations block */
-%token <varType> IN END /* Code block */
-%token <varType> IF THEN ELSE ENDIF /* Conditional block */
-%token <varType> WHILE DO ENDWHILE ENDDO /* While-do and Do-while loop block */
-%token <varType> FOR FROM TO DOWNTO ENDFOR /* For loop block */
-%token <varType> READ WRITE
-%token <varType> ASSIGN
-%token <varType> ADD SUB MUL DIV MOD /* Arithmetic operators */
-%token <varType> EQ NEQ LT GT LE GE /* Boolean operators */
-%token <varType> L_BRACKET R_BRACKET SEMICOLON COLON /* Symbols */
-%token <varType> NUM
-%token <varType> PID
+%token <sval> DECLARE /* Declarations block */
+%token <sval> IN END /* Code block */
+%token <sval> IF THEN ELSE ENDIF /* Conditional block */
+%token <sval> WHILE DO ENDWHILE ENDDO /* While-do and Do-while loop block */
+%token <sval> FOR FROM TO DOWNTO ENDFOR /* For loop block */
+%token <sval> READ WRITE
+%token <sval> ASSIGN
+%token <sval> ADD SUB MUL DIV MOD /* Arithmetic operators */
+%token <sval> EQ NEQ LT GT LE GE /* Boolean operators */
+%token <sval> L_BRACKET R_BRACKET SEMICOLON COLON /* Symbols */
+%token <sval> NUM
+%token <sval> PID
 
 %%
 
@@ -85,19 +85,40 @@ condition		:	value EQ value
 						;
 
 value				:	NUM
+							{
+								Variable* tmp = new Variable($1, -1);
+								tmp->isNum = true;
+							}
 						|	id
 						;
 
 id					:	PID
+							{
+								Variable* tmp = new Variable($1, -1);
+								tmp->isVar = true;
+							}
 						|	PID L_BRACKET PID R_BRACKET
+							{
+								// TODO: Getting variable from table if exists
+								$$ = new Variable($1, -1);
+							}
 						|	PID	L_BRACKET NUM R_BRACKET
+							{
+								// TODO: Getting variable from table if exists
+								$$ = new Variable($1, -1);
+							}
 						;
 
 %%
 int main()
 {
   yyparse();
-
-	Variable* var = new Variable("asd", 5);
   return 0;
+}
+
+int yyerror(const char *p)
+{
+	cerr << "Error: " << p << " in line " << yylineno << endl;
+	exit(1);
+	return 1;
 }

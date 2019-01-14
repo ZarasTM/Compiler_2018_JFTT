@@ -28,12 +28,12 @@ public:
   void addJump(long long int currLine);
 
   // Constructor
-  Labeler(vector<string>* assemblyCode, long long int* currLine);
+  Labeler(vector<string>& assemblyCode, long long int& currLine);
 };
 
-Labeler::Labeler(vector<string>* assemblyCode, long long int* currLine){
-  this->assemblyCode = assemblyCode;
-  this->currLine = currLine;
+Labeler::Labeler(vector<string>& assemblyCode, long long int& currLine){
+  this->assemblyCode = &assemblyCode;
+  this->currLine = &currLine;
 }
 
 void Labeler::fixWhile(){}

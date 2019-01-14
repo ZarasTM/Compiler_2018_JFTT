@@ -25,7 +25,7 @@ public:
   void insertNum();
 
   // Constructor
-  Inserter(vector<string>* assemblyCode);
+  Inserter(vector<string>& assemblyCode);
 };
 
 void Inserter::insertToReg(Variable* var, string reg){}
@@ -38,8 +38,8 @@ void Inserter::insertVar(){}
 
 void Inserter::insertNum(){}
 
-Inserter::Inserter(vector<string>* assemblyCode){
-  this->assemblyCode = assemblyCode;
+Inserter::Inserter(vector<string>& assemblyCode){
+  this->assemblyCode = &assemblyCode;
 }
 
 #endif /* end of include guard: INSERTER_H */

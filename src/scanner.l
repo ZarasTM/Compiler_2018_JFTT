@@ -49,7 +49,7 @@ WHITESPACE	[ \t\r]+
 							}
 
 {NUMBER}			{
-								yylval.ival = (char*) strdup(yytext);
+								yylval.sval = (char*) strdup(yytext);
 								return NUM;
 							}
 

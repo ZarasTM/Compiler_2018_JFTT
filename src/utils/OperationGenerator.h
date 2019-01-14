@@ -35,7 +35,7 @@ public:
   void getMOD(Variable* var1, Variable* var2);
 
   // Constructor
-  OperationGenerator(vector<string>* assemblyCode, long long int* currLine, Inserter* inserter);
+  OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* inserter);
 };
 
 void OperationGenerator::prepareVariables(Variable* var1, Variable* var2){}
@@ -62,9 +62,9 @@ void OperationGenerator::getDIV(Variable* var1, Variable* var2){}
 
 void OperationGenerator::getMOD(Variable* var1, Variable* var2){}
 
-OperationGenerator::OperationGenerator(vector<string>* assemblyCode, long long int* currLine, Inserter* inserter){
-  this->assemblyCode = assemblyCode;
-  this->currLine = currLine;
+OperationGenerator::OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* inserter){
+  this->assemblyCode = &assemblyCode;
+  this->currLine = &currLine;
   this->inserter = inserter;
 }
 
