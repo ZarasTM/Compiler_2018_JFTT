@@ -1,11 +1,6 @@
 #ifndef OPER_GEN_H
 #define OPER_GEN_H
 
-#include <string>
-#include <vector>
-#include "Variable.h"
-#include "Inserter.h"
-
 using namespace std;
 
 class OperationGenerator{
@@ -13,7 +8,7 @@ private:
   // Pointers for improved accesibility
   vector<string>* assemblyCode;
   long long int* currLine;
-  Inserter* inserter;
+  Inserter* varInserter;
 
 public:
   // Inserts var1 and var2 to needed registers
@@ -35,7 +30,7 @@ public:
   void getMOD(Variable* var1, Variable* var2);
 
   // Constructor
-  OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* inserter);
+  OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* varInserter);
 };
 
 void OperationGenerator::prepareVariables(Variable* var1, Variable* var2){}
@@ -62,10 +57,10 @@ void OperationGenerator::getDIV(Variable* var1, Variable* var2){}
 
 void OperationGenerator::getMOD(Variable* var1, Variable* var2){}
 
-OperationGenerator::OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* inserter){
+OperationGenerator::OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* varInserter){
   this->assemblyCode = &assemblyCode;
   this->currLine = &currLine;
-  this->inserter = inserter;
+  this->varInserter = varInserter;
 }
 
 #endif /* end of include guard: OPER_GEN_H */

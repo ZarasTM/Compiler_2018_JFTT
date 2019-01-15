@@ -15,6 +15,11 @@ flex:
 	flex src/scanner.l bin/parser.tab.h
 	mv lex.yy.* bin
 
+test_file:
+	$(MAKE) basic
+	./compiler < tests/programs/programMy.imp > result
+	mr/maszyna-rejestrowa result
+
 clear:
 	rm -f compiler
 	rm -f bin/parser.tab.*

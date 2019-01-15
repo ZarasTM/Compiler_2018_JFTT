@@ -1,9 +1,6 @@
 #ifndef LABELER_H
 #define LABELER_H
 
-#include <string>
-#include <vector>
-
 using namespace std;
 
 class Labeler{

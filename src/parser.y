@@ -1,14 +1,13 @@
 /* Compiler for simple iterative language SIL
  *	TODO: Add class for getting variables in different forms (var, arr(var), arr(const))
+ * Last two registers G, H and register A are sacred and no important data should be held there
  */
 %{
 	#include <iostream>
 	#include <string>
 	#include "../src/utils/Variable.h"
-	#include "../src/utils/Inserter.h"
-	#include "../src/utils/Labeler.h"
-	#include "../src/utils/OperationGenerator.h"
 	#include "../src/utils/main.h"
+	#include "../src/utils/utility.h"
 
 	int yylex();
 	int yyerror(const char *p);
@@ -16,8 +15,8 @@
 
 	using namespace std;
 
-	//bool DEBUG = false;
-	bool DEBUG = true;
+	bool DEBUG = false;
+	//bool DEBUG = true;
 %}
 
 %union{
@@ -45,10 +44,21 @@
 %%
 
 program			:	DECLARE declaration IN commands END
+							{
+								finish();
+							}
 						;
 
 declaration	:	declaration PID SEMICOLON
+							{
+								if(DEBUG) cout << "Declaring variable " << $2 << endl;
+								symTab->declare($2);
+							}
 						|	declaration PID L_BRACKET NUM COLON NUM R_BRACKET SEMICOLON
+							{
+								if(DEBUG) cout << "Declaring table " << $2 << " from " << $4 << " to " << $6 << endl;
+								symTab->declareArray($2, $4, $6);
+							}
 						| %empty
 						;
 
@@ -57,8 +67,24 @@ commands		:	commands command
 						;
 
 command			:	id ASSIGN expression SEMICOLON
-						|	IF condition THEN commands
-							ELSE commands ENDIF
+							{
+								if(DEBUG){
+									cout << "Assigning ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ") ";
+									}else{
+										cout << $3->name;
+									}
+									cout << " to ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") " << endl;
+									}else{
+										cout << $1->name << endl;
+									}
+								}
+								assign($1, $3);
+							}
+						|	IF condition THEN commands ELSE commands ENDIF
 						|	IF condition THEN commands ENDIF
 						|	WHILE	condition DO commands ENDWHILE
 						|	DO commands WHILE condition ENDDO
@@ -66,9 +92,21 @@ command			:	id ASSIGN expression SEMICOLON
 						|	FOR PID FROM value DOWNTO value	DO commands ENDFOR
 						|	READ id SEMICOLON
 						|	WRITE value SEMICOLON
+							{
+								if(DEBUG) {
+									cout << "Writing ";
+									if($2->isArr){
+										cout << $2->name << "(" << $2->varIndex << ") " << endl;
+									}else{
+										cout << $2->name << endl;
+									}
+								}
+								getWrite($2);
+							}
+						| %empty
 						;
 
-expression	:	value
+expression	:	value {$$ = $1;}
 						|	value ADD value
 						|	value SUB value
 						|	value MUL value
@@ -88,24 +126,33 @@ value				:	NUM
 							{
 								Variable* tmp = new Variable($1, -1);
 								tmp->isNum = true;
+								$$ = tmp;
 							}
-						|	id
+						|	id {$$ = $1;}
 						;
 
 id					:	PID
 							{
 								Variable* tmp = new Variable($1, -1);
 								tmp->isVar = true;
+								$$ = tmp;
 							}
 						|	PID L_BRACKET PID R_BRACKET
 							{
-								// TODO: Getting variable from table if exists
-								$$ = new Variable($1, -1);
+								// tmp: isArr, isVar, varIndex=var
+								Variable* tmp = new Variable($1, -1);
+								tmp->isArr = true;
+								tmp->isVar = true;
+								tmp->varIndex = $3;
+								$$ = tmp;
 							}
 						|	PID	L_BRACKET NUM R_BRACKET
 							{
-								// TODO: Getting variable from table if exists
-								$$ = new Variable($1, -1);
+								Variable* tmp = new Variable($1, -1);
+								tmp->isArr = true;
+								tmp->isNum = true;
+								tmp->varIndex = $3;
+								$$ = tmp;
 							}
 						;
 
