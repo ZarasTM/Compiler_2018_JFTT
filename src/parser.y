@@ -87,7 +87,17 @@ command			:	id ASSIGN expression SEMICOLON
 								}
 								assign($1, $3);
 							}
-						|	IF condition THEN commands ELSE commands ENDIF
+						|	IF condition THEN commands
+							{
+								addLine("JUMP 0");
+								labeler->addJump();
+								labeler->addLabel();
+							}
+							ELSE commands ENDIF
+							{
+								labeler->addLabel();
+								labeler->fixIf();
+							}
 						|	IF condition THEN commands ENDIF
 						|	WHILE	condition DO commands ENDWHILE
 						|	DO commands WHILE condition ENDDO
@@ -229,11 +239,119 @@ expression	:	value {$$ = $1;}
 						;
 
 condition		:	value EQ value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " = ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getEQ($1, $3);
+								labeler->addJump();
+							}
 						|	value NEQ value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " != ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getNEQ($1, $3);
+								labeler->addJump();
+							}
 						|	value LT value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " < ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getLT($1, $3);
+								labeler->addJump();
+							}
 						|	value GT value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " > ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getGT($1, $3);
+								labeler->addJump();
+							}
 						|	value LE value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " <= ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getLE($1, $3);
+								labeler->addJump();
+							}
 						|	value GE value
+							{
+								if(DEBUG){
+									cout << "Checking if ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " >= ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ")" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getGE($1, $3);
+								labeler->addJump();
+							}
 						;
 
 value				:	NUM

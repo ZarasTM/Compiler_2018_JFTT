@@ -49,7 +49,7 @@ void OperationGenerator::getEQ(Variable* var1, Variable* var2){
   addLine("COPY D C");
   addLine("SUB D B");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b=c
-  addLine("JUMP "+to_string(start));
+  addLine("JUMP "+to_string(0));
 }
 
 void OperationGenerator::getNEQ(Variable* var1, Variable* var2){
@@ -60,7 +60,7 @@ void OperationGenerator::getNEQ(Variable* var1, Variable* var2){
   addLine("JUMP "+to_string(*currLine+3));
   addLine("COPY D C");
   addLine("SUB D B");
-  addLine("JZERO D "+to_string(start)); // If zero b=c
+  addLine("JZERO D "+to_string(0)); // If zero b=c
 }
 
 void OperationGenerator::getLT(Variable* var1, Variable* var2){
@@ -71,7 +71,7 @@ void OperationGenerator::getLT(Variable* var1, Variable* var2){
   addLine("COPY D B");
   addLine("SUB D C");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b=c
-  addLine("JUMP "+to_string(start));
+  addLine("JUMP "+to_string(0));
 }
 
 void OperationGenerator::getGT(Variable* var1, Variable* var2){
@@ -82,7 +82,7 @@ void OperationGenerator::getGT(Variable* var1, Variable* var2){
   addLine("COPY D C");
   addLine("SUB D B");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b=c
-  addLine("JUMP "+to_string(start));
+  addLine("JUMP "+to_string(0));
 }
 
 void OperationGenerator::getLE(Variable* var1, Variable* var2){
@@ -90,7 +90,7 @@ void OperationGenerator::getLE(Variable* var1, Variable* var2){
   addLine("COPY D B\t\t# Checking LE");
   addLine("SUB D C");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b<=c
-  addLine("JUMP "+to_string(start));
+  addLine("JUMP "+to_string(0));
 }
 
 void OperationGenerator::getGE(Variable* var1, Variable* var2){
@@ -98,7 +98,7 @@ void OperationGenerator::getGE(Variable* var1, Variable* var2){
   addLine("COPY D C\t\t# Checking GE");
   addLine("SUB D B");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b>=c
-  addLine("JUMP "+to_string(start));
+  addLine("JUMP "+to_string(0));
 }
 
 // ARYTHMETIC OPERATIONS
