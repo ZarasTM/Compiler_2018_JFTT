@@ -1,6 +1,9 @@
-/* Compiler for simple iterative language SIL
- *	TODO: Add class for getting variables in different forms (var, arr(var), arr(const))
- * Last two registers G, H and register A are sacred and no important data should be held there
+/*
+ * TODO: ADD FUCKING IF'S AND CHECK CONDITIONAL STATEMENTS
+ * Registers G, H (used for loading arrays and variables)
+ * Register A (used for index input)
+ * Register F (used to hold result of arythmetic operations)
+ * All above registers are sacred and no important data should be held there
  */
 %{
 	#include <iostream>
@@ -91,6 +94,17 @@ command			:	id ASSIGN expression SEMICOLON
 						|	FOR PID FROM value TO value	DO commands ENDFOR
 						|	FOR PID FROM value DOWNTO value	DO commands ENDFOR
 						|	READ id SEMICOLON
+							{
+								if(DEBUG) {
+									cout << "Reading ";
+									if($2->isArr){
+										cout << $2->name << "(" << $2->varIndex << ") " << endl;
+									}else{
+										cout << $2->name << endl;
+									}
+								}
+								getRead($2);
+							}
 						|	WRITE value SEMICOLON
 							{
 								if(DEBUG) {
@@ -108,10 +122,110 @@ command			:	id ASSIGN expression SEMICOLON
 
 expression	:	value {$$ = $1;}
 						|	value ADD value
+							{
+								if(DEBUG){
+									cout << "Adding ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " + ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ") " << endl;
+									}else{
+										cout << $3->name << endl;
+									}
+								}
+								operationGen->getADD($1, $3);
+								Variable* tmp = new Variable("ADD_RES", -1);
+								tmp->isRes = true;
+								$$ = tmp;
+							}
 						|	value SUB value
+							{
+								if(DEBUG){
+									cout << "Subtracting ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " - ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ") " << endl;
+									}else{
+										cout << $3->name << endl;
+									}
+								}
+								operationGen->getSUB($1, $3);
+								Variable* tmp = new Variable("SUB_RES", -1);
+								tmp->isRes = true;
+								$$ = tmp;
+							}
 						|	value MUL value
+							{
+								if(DEBUG){
+									cout << "Multiplying ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " * ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ") " << endl;
+									}else{
+										cout << $3->name << endl;
+									}
+								}
+								operationGen->getMUL($1, $3);
+								Variable* tmp = new Variable("MUL_RES", -1);
+								tmp->isRes = true;
+								$$ = tmp;
+							}
 						|	value DIV value
+							{
+								if(DEBUG){
+									cout << "Dividing ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " / ";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << ") " << endl;
+									}else{
+										cout << $3->name << endl;
+									}
+								}
+								operationGen->getDIV($1, $3);
+								Variable* tmp = new Variable("DIV_RES", -1);
+								tmp->isRes = true;
+								$$ = tmp;
+							}
 						|	value MOD value
+							{
+								if(DEBUG){
+									cout << "Preforming modulo ";
+									if($1->isArr){
+										cout << $1->name << "(" << $1->varIndex << ") ";
+									}else{
+										cout << $1->name;
+									}
+									cout << " mod(";
+									if($3->isArr){
+										cout << $3->name << "(" << $3->varIndex << "))" << endl;
+									}else{
+										cout << $3->name << ")" << endl;
+									}
+								}
+								operationGen->getMOD($1, $3);
+								Variable* tmp = new Variable("MOD_RES", -1);
+								tmp->isRes = true;
+								$$ = tmp;
+							}
 						;
 
 condition		:	value EQ value

@@ -32,7 +32,7 @@ void assign(Variable* var1, Variable* var2){
   // Error handling 1
   if(symTab->lookup(var1->name) != 0){
     error("Variable "+var1->name+" not declared");
-  }else if(symTab->lookup(var2->name) != 0 && !var2->isNum){
+  }else if(symTab->lookup(var2->name) != 0 && !var2->isNum && !var2->isRes){
     error("Variable "+var2->name+" not declared");
   }
 
@@ -40,7 +40,7 @@ void assign(Variable* var1, Variable* var2){
   Variable* trueVar2 = symTab->getVariable(var2->name);
 
   // Error handling 2
-  if(trueVar2 == nullptr && !var2->isNum){
+  if(trueVar2 == nullptr && !var2->isNum  && !var2->isRes){
     error("Variable "+var2->name+" not initialized");
   }
 
@@ -50,14 +50,27 @@ void assign(Variable* var1, Variable* var2){
     symTab->initialize(trueVar1);
   }
 
-  varInserter->insertToReg(var2, "B");
-  varInserter->insertIndex(var1);
-  addLine("STORE B");
+  if(var2->isRes){
+    varInserter->insertIndex(var1);
+    addLine("STORE F");
+  }else{
+    varInserter->insertToReg(var2, "B");
+    varInserter->insertIndex(var1);
+    addLine("STORE B");
+  }
 }
 
 void getWrite(Variable* var){
   varInserter->insertToReg(var, "B");
   addLine("PUT B");
+}
+
+void getRead(Variable* var){
+  var->index = currMemIdx++;
+  symTab->initialize(var);
+  varInserter->insertIndex(var);
+  addLine("GET B");
+  addLine("STORE B");
 }
 
 void finish(){

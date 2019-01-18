@@ -82,8 +82,12 @@ int SymbolTable::declareArray(string id, string start, string end){
 int SymbolTable::initialize(Variable* var){
   for(int i=0; i<symbols.size(); i++){
     if(symbols.at(i)->name == var->name){
-      symbols.at(i)->var = var;
-      return 0;
+      if(symbols.at(i)->var != nullptr){
+        return 1;
+      }else{
+        symbols.at(i)->var = var;
+        return 0;
+      }
     }
   }
   return 1;
