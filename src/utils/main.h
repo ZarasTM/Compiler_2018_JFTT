@@ -74,7 +74,6 @@ void getRead(Variable* var){
 }
 
 void finish(){
-  addLine("HALT");
   for(int i=0; i<assemblyCode.size(); i++){
     if(DEBUG) cout << i << "\t|";
     cout << assemblyCode.at(i);

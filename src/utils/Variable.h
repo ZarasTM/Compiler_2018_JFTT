@@ -46,14 +46,12 @@ void Variable::setArray(long long int start, long long int end){
   }
 }
 
-Variable::Variable(string name, long long int index)
-{
+Variable::Variable(string name, long long int index){
   this->name = name;
   this->index = index;
 }
 
-Variable::~Variable()
-{
+Variable::~Variable(){
   free(this);
 }
 

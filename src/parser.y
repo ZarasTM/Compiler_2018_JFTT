@@ -48,6 +48,7 @@
 
 program			:	DECLARE declaration IN commands END
 							{
+							  addLine("HALT");
 								finish();
 							}
 						;
@@ -99,8 +100,32 @@ command			:	id ASSIGN expression SEMICOLON
 								labeler->fixIf();
 							}
 						|	IF condition THEN commands ENDIF
-						|	WHILE	condition DO commands ENDWHILE
-						|	DO commands WHILE condition ENDDO
+							{
+								labeler->addLabel();
+								labeler->fixIf();
+							}
+						|	WHILE
+							{
+									labeler->addLabel();
+							}
+							condition DO commands ENDWHILE
+							{
+								addLine("JUMP 0");
+								labeler->addJump();
+								labeler->addLabel();
+								labeler->fixWhile();
+							}
+						|	DO
+							{
+								labeler->addLabel();
+							}
+							commands WHILE condition ENDDO
+							{
+								addLine("JUMP 0");
+								labeler->addJump();
+								labeler->addLabel();
+								labeler->fixWhile();
+							}
 						|	FOR PID FROM value TO value	DO commands ENDFOR
 						|	FOR PID FROM value DOWNTO value	DO commands ENDFOR
 						|	READ id SEMICOLON
@@ -371,7 +396,6 @@ id					:	PID
 							}
 						|	PID L_BRACKET PID R_BRACKET
 							{
-								// tmp: isArr, isVar, varIndex=var
 								Variable* tmp = new Variable($1, -1);
 								tmp->isArr = true;
 								tmp->isVar = true;

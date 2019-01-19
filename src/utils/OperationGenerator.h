@@ -112,7 +112,7 @@ void OperationGenerator::getADD(Variable* var1, Variable* var2){
 void OperationGenerator::getSUB(Variable* var1, Variable* var2){
   prepareVariables(var1, var2);
   addLine("SUB B C\t\t# Subdividing");
-  addLine("COPY D B");
+  addLine("COPY F B");
 }
 
 void OperationGenerator::getMUL(Variable* var1, Variable* var2){
