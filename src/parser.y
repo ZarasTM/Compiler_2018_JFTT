@@ -130,10 +130,6 @@ command			:	id ASSIGN expression SEMICOLON
 							{
 								if(DEBUG) cout << "Creating iterator " << $2 << endl;
 								// Declaring and initializing iterator
-								/*symTab->declare($2);
-								Variable* tmp = new Variable($2, -1);
-								tmp->isVar = true;
-								assign(tmp, $4);*/
 								Variable* tmp = makeIterator($2, $4, $6);
 
 								labeler->addLabel();
@@ -157,10 +153,6 @@ command			:	id ASSIGN expression SEMICOLON
 							{
 								if(DEBUG) cout << "Creating iterator " << $2 << endl;
 								// Declaring and initializing iterator
-								/*symTab->declare($2);
-								Variable* tmp = new Variable($2, -1);
-								tmp->isVar = true;
-								assign(tmp, $4);*/
 								Variable* tmp = makeIterator($2, $4, $6);
 
 								// Fix problem created by not beeing able to use GE
