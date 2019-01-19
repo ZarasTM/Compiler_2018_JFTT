@@ -34,6 +34,9 @@ public:
   // Lookup symbol in sym tab (return 0 if exists 1 if not)
   int lookup(string name);
 
+  // Deletes variable from SymbolTable
+  int deleteVar(string name);
+
   // Constructor
   SymbolTable(vector<string>& assemblyCode, long long int& currMemIdx);
 };
@@ -97,6 +100,16 @@ int SymbolTable::lookup(string name){
   for(int i=0; i<symbols.size(); i++){
     if(symbols.at(i)->name == name){
       return 0;
+    }
+  }
+  return 1;
+}
+
+int SymbolTable::deleteVar(string name){
+  for(int i=0; i<symbols.size(); i++){
+    if(symbols.at(i)->name == name){
+       symbols.erase(symbols.begin()+i);
+       return 0;
     }
   }
   return 1;

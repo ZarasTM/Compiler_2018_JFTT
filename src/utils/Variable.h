@@ -18,6 +18,7 @@ public:
   bool isNum = false;
   bool isVar = false;
   bool isRes = false;
+  bool isBound = false;
 
   // Base data about variable
   string name;
@@ -30,6 +31,9 @@ public:
 
   // If using tab(var): varIndex = var->name, if using tab(const): varIndex = const
   string varIndex;
+
+  // If is iterable
+  Variable* varBound;
 
   void setArray(long long int start, long long int end);
 

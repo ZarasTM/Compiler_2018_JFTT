@@ -126,8 +126,65 @@ command			:	id ASSIGN expression SEMICOLON
 								labeler->addLabel();
 								labeler->fixWhile();
 							}
-						|	FOR PID FROM value TO value	DO commands ENDFOR
-						|	FOR PID FROM value DOWNTO value	DO commands ENDFOR
+						|	FOR PID FROM value TO value
+							{
+								if(DEBUG) cout << "Creating iterator " << $2 << endl;
+								// Declaring and initializing iterator
+								/*symTab->declare($2);
+								Variable* tmp = new Variable($2, -1);
+								tmp->isVar = true;
+								assign(tmp, $4);*/
+								Variable* tmp = makeIterator($2, $4, $6);
+
+								labeler->addLabel();
+								operationGen->getLE(tmp, tmp->varBound);
+								labeler->addJump();
+							}
+							DO commands ENDFOR
+							{
+								// Increment for iterator
+								varInserter->insertToReg($2, "B");
+								addLine("INC B");
+								addLine("STORE B");
+
+								addLine("JUMP 0");
+								labeler->addJump();
+								labeler->addLabel();
+								labeler->fixWhile();
+								symTab->deleteVar($2);
+							}
+						|	FOR PID FROM value DOWNTO value
+							{
+								if(DEBUG) cout << "Creating iterator " << $2 << endl;
+								// Declaring and initializing iterator
+								/*symTab->declare($2);
+								Variable* tmp = new Variable($2, -1);
+								tmp->isVar = true;
+								assign(tmp, $4);*/
+								Variable* tmp = makeIterator($2, $4, $6);
+
+								// Fix problem created by not beeing able to use GE
+								varInserter->insertToReg(tmp, "B");
+								addLine("INC B");
+								addLine("STORE B");
+
+								labeler->addLabel();
+								operationGen->getGT(tmp, $6);
+								labeler->addJump();
+
+								// Increment for iterator
+								varInserter->insertToReg($2, "B");
+								addLine("DEC B");
+								addLine("STORE B");
+							}
+							DO commands ENDFOR
+							{
+								addLine("JUMP 0");
+								labeler->addJump();
+								labeler->addLabel();
+								labeler->fixWhile();
+								symTab->deleteVar($2);
+							}
 						|	READ id SEMICOLON
 							{
 								if(DEBUG) {

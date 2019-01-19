@@ -43,6 +43,9 @@ void Inserter::insertToReg(Variable* var, string reg){
     insertVar(temp, reg);
   }else if(var->isNum){
     insertNum(var->name, reg);
+  }else if(var->isBound){
+    insertNum(to_string(var->index), "A");
+    addLine("LOAD "+reg);
   }
 }
 

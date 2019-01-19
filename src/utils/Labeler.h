@@ -90,8 +90,6 @@ void Labeler::fixWhile(){
   }
 }
 
-void Labeler::fixFor(){}
-
 void Labeler::addLabel(){
   labels.push_back(*currLine);
 }

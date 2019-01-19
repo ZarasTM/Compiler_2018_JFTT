@@ -17,8 +17,8 @@ flex:
 
 test_file:
 	$(MAKE) basic
-	./compiler < tests/programs/programMy.imp > result
-	#./compiler < tests/jftt2018-testy/1-numbers.imp > result
+	#./compiler < tests/programs/programMy.imp > result
+	./compiler < tests/jftt2018-testy/5-tab.imp > result
 	mr/maszyna-rejestrowa result
 
 clear:
