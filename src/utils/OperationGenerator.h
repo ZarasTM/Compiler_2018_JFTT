@@ -118,16 +118,13 @@ void OperationGenerator::getSUB(Variable* var1, Variable* var2){
 void OperationGenerator::getMUL(Variable* var1, Variable* var2){
   prepareVariables(var1, var2);
   addLine("SUB F F\t\t# Multiplying");
-  addLine("JZERO C " + to_string(*currLine+10));
-  addLine("JZERO B " + to_string(*currLine+9));
+  addLine("JZERO C " + to_string(*currLine+7));
   addLine("JODD C " + to_string(*currLine+4));
   addLine("ADD B B");
   addLine("HALF C");
-  addLine("JODD C " + to_string(*currLine-3));
+  addLine("JUMP " + to_string(*currLine-4));
   addLine("ADD F B");
-  addLine("ADD B B");
-  addLine("HALF C");
-  addLine("JUMP " + to_string(*currLine-9));
+  addLine("JUMP " + to_string(*currLine-4));
 }
 
 void OperationGenerator::getDIV(Variable* var1, Variable* var2){
