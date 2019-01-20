@@ -1,6 +1,8 @@
 #ifndef OPER_GEN_H
 #define OPER_GEN_H
 
+#include "Labeler.h"
+
 using namespace std;
 
 class OperationGenerator{
@@ -9,6 +11,7 @@ private:
   vector<string>* assemblyCode;
   long long int* currLine;
   Inserter* varInserter;
+  Labeler* labeler;
 
 public:
   // Inserts var1 and var2 to needed registers
@@ -50,6 +53,7 @@ void OperationGenerator::getEQ(Variable* var1, Variable* var2){
   addLine("SUB D B");
   addLine("JZERO D "+to_string(*currLine+2)); // If zero b=c
   addLine("JUMP "+to_string(0));
+
 }
 
 void OperationGenerator::getNEQ(Variable* var1, Variable* var2){

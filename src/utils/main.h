@@ -24,9 +24,9 @@ long long int currLine = 0;
 
 // Pointer to objects used in compiling
 SymbolTable* symTab = new SymbolTable(assemblyCode, currMemIdx);
+Labeler* labeler = new Labeler(assemblyCode, currLine);
 Inserter* varInserter = new Inserter(assemblyCode, symTab);
 OperationGenerator* operationGen = new OperationGenerator(assemblyCode, currLine, varInserter);
-Labeler* labeler = new Labeler(assemblyCode, currLine);
 
 void assign(Variable* var1, Variable* var2){
   // Error handling 1

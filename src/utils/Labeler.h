@@ -18,6 +18,7 @@ public:
   void fixWhile();
   void fixFor();
   void fixIf();
+  void fixIfElse();
   void fixDo();
 
   // Functions adding jumps and labels to vectors
@@ -37,7 +38,30 @@ Labeler::Labeler(vector<string>& assemblyCode, long long int& currLine){
   this->currLine = &currLine;
 }
 
-void Labeler::fixIf() {
+void Labeler::fixIfElse(){
+
+  for(int i=0; i<2; i++){
+    long long int jumperLine = jumps.back();
+
+    string jumper = assemblyCode->at(jumperLine-1);
+
+    if(labels.empty()){
+      return;
+    }
+
+    jumps.pop_back();
+
+    long long int labelLine = labels.back();
+    labels.pop_back();
+
+    string s = jumper.substr(jumper.find_last_of(" "));
+    jumper = jumper.substr(0, jumper.length() - s.length()).append(" ").append(to_string(labelLine)).append("\n");
+
+    assemblyCode->at(jumperLine-1) = jumper;
+  }
+}
+
+void Labeler::fixIf(){
 
   long long int jumperLine = jumps.back();
 
@@ -48,6 +72,7 @@ void Labeler::fixIf() {
   }
 
   jumps.pop_back();
+
 
   long long int labelLine = labels.back();
   labels.pop_back();
@@ -64,11 +89,13 @@ void Labeler::fixWhile(){
 	labels.pop_back();
 	int label2 = labels.back();
 	labels.pop_back();
+
 	labels.push_back(label1);
 	labels.push_back(label2);
 
 	for(int i=0; i<2; i++){
 		long long int jumperLine = jumps.back();
+
 
 		string jumper = assemblyCode->at(jumperLine-1);
 

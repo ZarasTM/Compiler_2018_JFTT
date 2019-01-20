@@ -97,7 +97,7 @@ command			:	id ASSIGN expression SEMICOLON
 							ELSE commands ENDIF
 							{
 								labeler->addLabel();
-								labeler->fixIf();
+								labeler->fixIfElse();
 							}
 						|	IF condition THEN commands ENDIF
 							{
