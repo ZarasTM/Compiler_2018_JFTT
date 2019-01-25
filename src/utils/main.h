@@ -83,11 +83,17 @@ Variable* makeIterator(string name, Variable* var1, Variable* var2){
 }
 
 void getWrite(Variable* var){
+  if(symTab->getVariable(var->name) == nullptr){
+    error("Variable "+var->name+" not initialized");
+  }
   varInserter->insertToReg(var, "B");
   addLine("PUT B");
 }
 
 void getRead(Variable* var){
+  if(symTab->lookup(var->name)){
+    error("Variable "+var->name+" not declared");
+  }
   var->index = currMemIdx++;
   symTab->initialize(var);
   varInserter->insertIndex(var);

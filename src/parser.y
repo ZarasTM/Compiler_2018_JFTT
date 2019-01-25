@@ -55,7 +55,12 @@ program			:	DECLARE declaration IN commands END
 declaration	:	declaration PID SEMICOLON
 							{
 								if(DEBUG) cout << "Declaring variable " << $2 << endl;
-								symTab->declare($2);
+
+								if(symTab->declare($2)){
+									string msg = "Second declaration of variable ";
+									string var = $2;
+									error(msg+$2);
+								}
 							}
 						|	declaration PID L_BRACKET NUM COLON NUM R_BRACKET SEMICOLON
 							{
