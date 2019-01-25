@@ -19,7 +19,7 @@ test_file:
 	$(MAKE) basic
 	#./compiler < tests/jftt2018-testy/programMy.imp > result
 	./compiler < tests/jftt2018-testy/ms-2.imp > result
-	mr/maszyna-rejestrowa result
+	mr/maszyna-rejestrowa-cln result
 
 clear:
 	rm -f compiler

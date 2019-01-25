@@ -1,5 +1,4 @@
 /*
- * TODO: ADD FUCKING IF'S AND CHECK CONDITIONAL STATEMENTS
  * Registers G, H (used for loading arrays and variables)
  * Register A (used for index input)
  * Register F (used to hold result of arythmetic operations)

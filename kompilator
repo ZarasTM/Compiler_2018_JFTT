@@ -1,0 +1,6 @@
+#!/bin/bash
+
+FILE_IN=$1
+FILE_OUT=$2
+
+./compiler < $FILE_IN > $FILE_OUT
