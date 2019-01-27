@@ -1,5 +1,5 @@
 all:
-	$(MAKE) basic
+	@$(MAKE) basic > /dev/null 1> /dev/null 2> /dev/null
 
 basic:
 	mkdir -p bin
@@ -8,7 +8,7 @@ basic:
 	g++ -std=c++14 bin/lex.yy.c bin/parser.tab.c -o compiler
 
 bison:
-	bison -d src/parser.y --verbose 2> /dev/null
+	bison -d src/parser.y
 	mv parser.tab.* bin
 
 flex:
@@ -16,10 +16,9 @@ flex:
 	mv lex.yy.* bin
 
 test_file:
-	$(MAKE) basic
-	#./compiler < tests/jftt2018-testy/programMy.imp > result
-	./compiler < tests/jftt2018-testy/program2.imp > result
-	mr/maszyna-rejestrowa-cln result
+	@$(MAKE) basic > /dev/null 1> /dev/null 2> /dev/null
+	@./compiler < tests/jftt2018-testy/program0.imp > result
+	@mr/maszyna-rejestrowa-cln result
 
 clear:
 	rm -f compiler
