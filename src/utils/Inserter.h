@@ -95,8 +95,15 @@ void Inserter::insertVar(Variable* var, string reg){
 
 void Inserter::insertNum(string dec, string reg){
   string bin = decToBin(dec);
-  // TODO: INC insted of ADD sometimes
   addLine("SUB "+reg+" "+reg+"\t\t# Inserting dec "+dec+" bin "+bin+" into register "+reg);
+
+  // Insert using INC if number is less than 24
+  if(stoll(dec) < 24){
+    for(int i=stoll(dec); i>0; i--){
+      addLine("INC "+reg);
+    }
+    return;
+  }
 
   for(int i=0; i<bin.size(); i++){
     if(bin.at(i) == '1'){

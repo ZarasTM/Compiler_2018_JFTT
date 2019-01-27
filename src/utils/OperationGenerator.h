@@ -133,6 +133,20 @@ void OperationGenerator::getMUL(Variable* var1, Variable* var2){
 
 void OperationGenerator::getDIV(Variable* var1, Variable* var2){
   prepareVariables(var1, var2);
+
+  // Handle dividing by powers of 2
+  if(var2->isNum && !var2->isArr){
+    for(long long int i=2; i<=stoll(var2->name); i=i*2){
+      if(stoll(var2->name) == i){
+        for(int j=i; j>=2; j=j/2){
+          addLine("HALF B");
+        }
+        addLine("COPY F B");
+        return;
+      }
+    }
+  }
+
   addLine("SUB F F\t\t# Dividing");
   addLine("SUB E E");
   addLine("JZERO C "+to_string(*currLine+18)); // If C == 0 jump @do_1_end

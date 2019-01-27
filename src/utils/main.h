@@ -83,7 +83,7 @@ Variable* makeIterator(string name, Variable* var1, Variable* var2){
 }
 
 void getWrite(Variable* var){
-  if(symTab->getVariable(var->name) == nullptr){
+  if(symTab->getVariable(var->name) == nullptr && !var->isNum){
     error("Variable "+var->name+" not initialized");
   }
   varInserter->insertToReg(var, "B");
