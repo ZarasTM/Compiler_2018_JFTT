@@ -174,7 +174,10 @@ void OperationGenerator::getMOD(Variable* var1, Variable* var2){
   prepareVariables(var1, var2);
   addLine("SUB D D\t\t# Performing modulo operation");
   addLine("SUB E E");
-  addLine("JZERO C "+to_string(*currLine+18)); // If C == 0 jump @do_1_end
+  addLine("JZERO B "+to_string(*currLine+21));
+  addLine("JZERO C "+to_string(*currLine+20));
+  addLine("JZERO B "+to_string(*currLine+20));
+  addLine("JZERO C "+to_string(*currLine+19)); // If C == 0 jump @do_1_end
   addLine("INC E");
   addLine("COPY A B"); // @while_1
   addLine("SUB A C");
@@ -190,9 +193,10 @@ void OperationGenerator::getMOD(Variable* var1, Variable* var2){
   addLine("ADD D E");
   addLine("HALF C"); // @if_1_end
   addLine("HALF E");
-  addLine("JZERO E "+to_string(*currLine+2)); // @do_1_cond, If D != 0 jump @do_1_end
+  addLine("JZERO E "+to_string(*currLine+3)); // @do_1_cond, If D != 0 jump @do_1_end
   addLine("JUMP "+to_string(*currLine-9)); // Jump @do_1_start
-  addLine("COPY F B"); // @do_1_end (this line needs to be here cuz we load numbers to B)
+  addLine("COPY B D"); // @do_1_end (this line needs to be here cuz we load numbers to B)
+  addLine("COPY F B");
 }
 
 OperationGenerator::OperationGenerator(vector<string>& assemblyCode, long long int& currLine, Inserter* varInserter){

@@ -8,7 +8,7 @@ basic:
 	g++ -std=c++14 bin/lex.yy.c bin/parser.tab.c -o compiler
 
 bison:
-	bison -d src/parser.y --verbose
+	bison -d src/parser.y --verbose 2> /dev/null
 	mv parser.tab.* bin
 
 flex:
@@ -18,7 +18,7 @@ flex:
 test_file:
 	$(MAKE) basic
 	#./compiler < tests/jftt2018-testy/programMy.imp > result
-	./compiler < tests/jftt2018-testy/0-div-mod.imp > result
+	./compiler < tests/jftt2018-testy/program2.imp > result
 	mr/maszyna-rejestrowa-cln result
 
 clear:
