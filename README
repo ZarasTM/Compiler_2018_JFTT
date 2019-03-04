@@ -1,20 +1,17 @@
-Imie i Nazwisko: Piotr Zaraś
-Nr. indeksu: 236671
-
-Opis plików:
+File documentation:
 ./
-  Makefile - kompiluje kompilator
-  kompilator - uruchamia kompilator zgodnie z wymaganiami to znaczy: ./kompilator <file_in> <file_out>
+  Makefile - compiles compiler
+  kompilator - runs compiler using filenames instead of streams: ./kompilator <file_in> <file_out>
 
 ./src/
-  scanner.l - analizator lexykalny
-  parser.y - parser do załączonej gramatyki
-
+  scanner.l - lexical analizer
+  parser.y - parser for given grammar
+  
 ./src/utils/
-  main.h - główny kod odpowiedzialny za przypisywanie zmiennych, testowanie, wczytywanie i wypisywanie
-  Inserter.h - klasa służąca do ładowania zmiennych/stałych/elementów_tablicy do podanych rejestrów
-  Labeler.h - klasa odpowiedzialna za wstawianie jumpów/labeli oraz za naprawę pętli i instrukcji warunkowych
-  OperationGenerator.h - klasa generująca kod operacji takich jak ADD/SUB/DIV/MUL/MOD/=/!=/</>/<=/>=
-  SymbolTable.h - klasa przechowująca wszystkie zmienne/tablice oraz odpowiedzialna za ich inicjalizacje oraz deklaracje
-  Variable.h - klasa zmiennej posiadająca informacje o dowolnej zmiennej/tablicy/iteratorze/stałej
-  utility.h - zawiera przydatne metody takie jak zamiana liczby dziesiętnej na binarną
+  main.h - main code responsible for variable handling, loading and outputing
+  Inserter.h - class for loading variables/constants/table_elements to given registers
+  Labeler.h - class for handling jumps/labels and reparing loops and ifs
+  OperationGenerator.h - class for generating ADD/SUB/DIV/MUL/MOD/=/!=/</>/<=/>=
+  SymbolTable.h - class handling variables/tables responsible for their initialization and declaration
+  Variable.h - class with informations about given variable/table/iterator/constant
+  utility.h - contains usefull methods like conversion from dec to bin
